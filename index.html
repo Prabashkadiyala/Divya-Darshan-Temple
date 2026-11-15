@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DivyaDarshan - Divine Shrine E-Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cinzel, Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cinzel+Decorative:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Exact style.css rules */
+        .font-serif { font-family: 'Cinzel', Georgia, serif; }
+
+        .glass-panel {
+            background: rgba(21, 0, 4, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(234, 179, 8, 0.25);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fffbeb 0%, #fde047 50%, #ca8a04 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-border-glow {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
+        }
+
+        .gold-border-glow:hover {
+            box-shadow: 0 0 25px rgba(234, 179, 8, 0.45);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #150004; }
+        ::-webkit-scrollbar-thumb { background: #ca8a04; border-radius: 4px; }
+
+        /* Traditional Low-Brightness Divine Background Theme */
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0d0002;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(202, 138, 4, 0.04) 0%, transparent 65%),
+                radial-gradient(circle at 10% 20%, rgba(234, 179, 8, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(80, 0, 10, 0.2) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 0l8 24 24 8-24 8-8 24-8-24-24-8 24-8z' fill='%20fde047' fill-opacity='0.02'/%3E%3C/svg%3E");
+            background-attachment: fixed;
+            color: #fffbeb;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <nav class="bg-[#150004]/90 backdrop-blur-md border-b border-amber-500/30 sticky top-0 z-40 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="filterTemples('all')">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-700 p-0.5 shadow-lg flex items-center justify-center">
+                        <div class="w-full h-full bg-[#150004] rounded-full flex items-center justify-center text-amber-400 text-2xl font-bold">
+                            🛕
+                        </div>
+                    </div>
+                    <div>
+                        <span class="font-serif font-bold text-2xl tracking-wider gold-gradient-text block leading-none">DIVYADARSHAN</span>
+                        <span class="text-[10px] text-amber-200/80 tracking-widest uppercase">Sacred Shrine Portal</span>
+                    </div>
+                </div>
+
+                <!-- Auth Navigation Controls -->
+                <div id="navAuthContainer" class="flex items-center space-x-3">
+                    <!-- Javascript populates login/register/my bookings/logout actions -->
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Divine Banner -->
+    <header class="relative py-12 px-4 text-center overflow-hidden border-b border-amber-500/20 bg-gradient-to-b from-[#150004] via-[#1a0005]/80 to-transparent">
+        <div class="max-w-4xl mx-auto relative z-10">
+            <div class="text-amber-400 text-3xl mb-2">🕉️</div>
+            <h1 class="font-serif text-2xl sm:text-4xl text-amber-200 font-bold mb-3 tracking-wide gold-gradient-text">
+                Sacred Darshan Reservation Portal
+            </h1>
+            <p class="text-amber-100/70 text-xs sm:text-sm max-w-2xl mx-auto mb-8 font-light">
+                Official E-Services for 10 Shrines in Andhra Pradesh & 10 Shrines in Telangana.
+            </p>
+
+            <!-- Search & Filter Controls -->
+            <div class="glass-panel p-3 sm:p-4 rounded-2xl max-w-3xl mx-auto space-y-3">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-amber-400"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search shrine by name or district..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-amber-500/30 bg-[#150004]/80 text-amber-100 text-sm focus:outline-none focus:border-amber-400 placeholder-amber-200/30">
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-2 pt-1">
+                    <button onclick="filterTemples('all')" class="state-tab active-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border border-amber-500/40 transition-all bg-amber-600 text-white shadow" data-state="all">
+                        All Shrines (20)
+                    </button>
+                    <button onclick="filterTemples('AP')" class="state-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border border-amber-500/30 transition-all bg-[#150004] text-amber-200 hover:bg-amber-600/30" data-state="AP">
+                        Andhra Pradesh (10)
+                    </button>
+                    <button onclick="filterTemples('TS')" class="state-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border border-amber-500/30 transition-all bg-[#150004] text-amber-200 hover:bg-amber-600/30" data-state="TS">
+                        Telangana (10)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Shrine Grid -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow">
+        <div class="flex justify-between items-center mb-8 border-b border-amber-500/20 pb-3">
+            <h2 class="font-serif text-xl sm:text-2xl text-amber-300 flex items-center gap-2">
+                <span>🛕</span> Shrine Destinations
+            </h2>
+            <span id="templeCountBadge" class="text-xs bg-amber-500/10 border border-amber-500/40 text-amber-300 px-3 py-1 rounded-full font-bold">
+                Showing 20 Temples
+            </span>
+        </div>
+
+        <div id="templesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Dynamically populated via JavaScript -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#150004] border-t border-amber-500/30 py-8 text-center text-xs text-amber-200/50">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-serif text-lg text-amber-400 mb-1">DIVYADARSHAN E-PORTAL</p>
+            <p class="max-w-md mx-auto mb-3">Darshan reservation portal across 20 prominent temples of Andhra Pradesh & Telangana.</p>
+            <p>&copy; 2026 DivyaDarshan Divine E-Services. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ================= MODALS SECTION ================= -->
+
+    <!-- 1. LOGIN MODAL -->
+    <div id="loginModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-panel rounded-2xl max-w-md w-full overflow-hidden border border-amber-500/40">
+            <div class="bg-gradient-to-r from-[#150004] via-[#2a0008] to-[#150004] p-5 border-b border-amber-500/30 flex justify-between items-center">
+                <h3 class="font-serif text-xl text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-user-lock text-amber-500"></i> Devotee Login
+                </h3>
+                <button onclick="closeModal('loginModal')" class="text-amber-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Full Name / Username</label>
+                    <input type="text" id="loginEmail" required placeholder="e.g. Prabash" class="w-full px-4 py-2.5 rounded-xl border border-amber-500/30 bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-amber-500/30 bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-3 rounded-xl shadow-lg border border-amber-400/40 text-sm transition-all uppercase tracking-wider">
+                    Log In
+                </button>
+                <div class="text-center pt-2 text-xs text-amber-200/70 border-t border-amber-500/20">
+                    Don't have an account? 
+                    <button type="button" onclick="switchModal('loginModal', 'registerModal')" class="text-amber-400 font-bold hover:underline">
+                        Create an Account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. CREATE ACCOUNT (REGISTER) MODAL -->
+    <div id="registerModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-panel rounded-2xl max-w-md w-full overflow-hidden border border-amber-500/40">
+            <div class="bg-gradient-to-r from-[#150004] via-[#2a0008] to-[#150004] p-5 border-b border-amber-500/30 flex justify-between items-center">
+                <h3 class="font-serif text-xl text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-amber-500"></i> Create Devotee Account
+                </h3>
+                <button onclick="closeModal('registerModal')" class="text-amber-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <form id="registerForm" onsubmit="handleRegister(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Full Name</label>
+                    <input type="text" id="regName" required placeholder="e.g. Prabash" class="w-full px-4 py-2.5 rounded-xl border border-amber-500/30 bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Email Address</label>
+                    <input type="email" id="regEmail" required placeholder="prabash@example.com" class="w-full px-4 py-2.5 rounded-xl border border-amber-500/30 bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Mobile Number</label>
+                    <input type="tel" id="regPhone" required placeholder="9876543210" class="w-full px-4 py-2.5 rounded-xl border border-amber-500/30 bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Password</label>
+                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-amber-500/30 bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-3 rounded-xl shadow-lg border border-amber-400/40 text-sm transition-all uppercase tracking-wider">
+                    Register Account
+                </button>
+                <div class="text-center pt-2 text-xs text-amber-200/70 border-t border-amber-500/20">
+                    Already have an account? 
+                    <button type="button" onclick="switchModal('registerModal', 'loginModal')" class="text-amber-400 font-bold hover:underline">
+                        Log In Here
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-panel rounded-2xl max-w-md w-full overflow-hidden border border-amber-500/40">
+            <div class="bg-gradient-to-r from-[#150004] to-black p-5 border-b border-amber-500/30 flex justify-between items-center">
+                <h3 class="font-serif text-xl text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-amber-500"></i> Revenue Dept Login
+                </h3>
+                <button onclick="closeModal('adminLoginModal')" class="text-amber-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Admin Identity</label>
+                    <input type="text" id="adminUser" required class="w-full px-4 py-2.5 rounded-xl border border-amber-500/30 bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Passkey</label>
+                    <input type="password" id="adminPass" required class="w-full px-4 py-2.5 rounded-xl border border-amber-500/30 bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+                <button type="submit" class="w-full bg-[#150004] hover:bg-black text-amber-300 font-bold py-3 rounded-xl border border-amber-500/40 text-sm transition-all">
+                    Access Portal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. DARSHAN BOOKING MODAL -->
+    <div id="bookingModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full my-8 overflow-hidden border border-amber-500/40">
+            <div class="bg-gradient-to-r from-[#150004] via-[#2a0008] to-[#150004] p-5 border-b border-amber-500/30 flex justify-between items-center">
+                <div>
+                    <h3 id="bookModalTempleName" class="font-serif text-xl text-amber-300">Temple Booking</h3>
+                    <p id="bookModalTempleLoc" class="text-xs text-amber-200/70"></p>
+                </div>
+                <button onclick="closeModal('bookingModal')" class="text-amber-400 hover:text-white text-2xl">&times;</button>
+            </div>
+
+            <form id="bookingForm" onsubmit="confirmBooking(event)" class="p-6 space-y-6">
+                <!-- Selection of 3 Types of Darshanas -->
+                <div>
+                    <label class="block text-xs font-bold text-amber-200 uppercase tracking-wider mb-2">Select Darshan Type</label>
+                    <div id="darshanTypesContainer" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Date & Slot Selection -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Darshan Date</label>
+                        <input type="date" id="bookingDate" required class="w-full px-4 py-2 border border-amber-500/30 rounded-xl bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Time Slot</label>
+                        <select id="bookingSlot" required class="w-full px-4 py-2 border border-amber-500/30 rounded-xl bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                            <option value="">-- Choose Slot --</option>
+                            <option value="06:00 AM - 09:00 AM">06:00 AM - 09:00 AM (Morning)</option>
+                            <option value="09:00 AM - 12:00 PM">09:00 AM - 12:00 PM (Forenoon)</option>
+                            <option value="02:00 PM - 05:00 PM">02:00 PM - 05:00 PM (Afternoon)</option>
+                            <option value="06:00 PM - 09:00 PM">06:00 PM - 09:00 PM (Evening)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Devotees Breakdown -->
+                <div class="border-t border-b border-amber-500/20 py-4 space-y-3">
+                    <span class="block text-xs font-bold text-amber-300 uppercase tracking-wider">Devotees Count</span>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <!-- Adults -->
+                        <div class="bg-[#150004]/60 p-3 rounded-xl border border-amber-500/30">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-amber-100">Adults</span>
+                                <span id="adultFareTag" class="text-xs font-bold text-amber-400">₹0</span>
+                            </div>
+                            <input type="number" id="countAdults" min="1" max="10" value="1" oninput="calculateTotal()" class="w-full px-3 py-1.5 border border-amber-500/40 rounded-lg bg-[#0d0002] text-center font-bold text-amber-300 text-sm">
+                        </div>
+
+                        <!-- Children -->
+                        <div class="bg-[#150004]/60 p-3 rounded-xl border border-amber-500/30">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-amber-100">Children (5-12 yr)</span>
+                                <span id="childFareTag" class="text-xs font-bold text-amber-400">₹100</span>
+                            </div>
+                            <input type="number" id="countChildren" min="0" max="10" value="0" oninput="calculateTotal()" class="w-full px-3 py-1.5 border border-amber-500/40 rounded-lg bg-[#0d0002] text-center font-bold text-amber-300 text-sm">
+                        </div>
+
+                        <!-- Senior Citizens / Handicapped -->
+                        <div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/40">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-emerald-200">Senior / Disabled</span>
+                                <span class="text-xs font-bold text-emerald-400 bg-emerald-900/60 px-1.5 py-0.5 rounded">FREE</span>
+                            </div>
+                            <input type="number" id="countSeniors" min="0" max="10" value="0" oninput="calculateTotal()" class="w-full px-3 py-1.5 border border-emerald-500/40 rounded-lg bg-[#0d0002] text-center font-bold text-emerald-300 text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Primary Devotee & ID -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Primary Devotee Name</label>
+                        <input type="text" id="devoteeName" required placeholder="Full Name" class="w-full px-4 py-2 border border-amber-500/30 rounded-xl bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-amber-200 uppercase mb-1">Government Card / Identity ID</label>
+                        <input type="text" id="devoteeAadhaar" required placeholder="Identity ID Number" class="w-full px-4 py-2 border border-amber-500/30 rounded-xl bg-[#150004] text-amber-100 text-sm focus:outline-none focus:border-amber-400">
+                    </div>
+                </div>
+
+                <!-- Total Summary -->
+                <div class="bg-gradient-to-r from-[#150004] to-[#2b0008] p-4 rounded-xl border border-amber-500/30 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-amber-300 uppercase font-bold block">Total Amount Payable</span>
+                        <span class="text-[10px] text-amber-200/60">* Senior citizens & handicapped entry is strictly FREE (₹0).</span>
+                    </div>
+                    <div class="text-right">
+                        <span id="grandTotalDisplay" class="text-2xl font-black text-amber-400">₹0</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-black py-3 rounded-xl shadow-xl transition-all text-sm uppercase tracking-wider border border-amber-400/40">
+                    Confirm & Reserve E-Ticket
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 5. MY BOOKINGS MODAL (Lists all tickets booked by logged-in user) -->
+    <div id="myBookingsModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel rounded-2xl max-w-3xl w-full my-8 overflow-hidden border border-amber-500/40">
+            <div class="bg-gradient-to-r from-[#150004] via-[#2a0008] to-[#150004] p-5 border-b border-amber-500/30 flex justify-between items-center">
+                <h3 class="font-serif text-xl text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-ticket text-amber-400"></i> My Reserved Darshan Passes
+                </h3>
+                <button onclick="closeModal('myBookingsModal')" class="text-amber-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div id="myBookingsListContainer" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. E-TICKET RECEIPT MODAL -->
+    <div id="ticketModal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-amber-50 rounded-2xl shadow-2xl max-w-lg w-full my-8 overflow-hidden border-2 border-amber-500 text-gray-900">
+            <div class="bg-gradient-to-r from-[#150004] via-[#2a0008] to-[#150004] p-6 text-center text-amber-300 relative border-b-2 border-amber-500">
+                <span class="text-3xl">🛕</span>
+                <h3 class="font-serif text-2xl font-bold mt-1">DIVYADARSHAN E-PASS</h3>
+                <p class="text-[10px] text-amber-200/80 uppercase tracking-widest">Official Entry Pass</p>
+                <button onclick="closeModal('ticketModal')" class="absolute right-4 top-4 text-amber-300 hover:text-white text-2xl">&times;</button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="flex justify-between items-center border-b border-amber-200 pb-3">
+                    <div>
+                        <p class="text-[10px] text-gray-500 uppercase font-bold">Booking Ref No.</p>
+                        <p id="tRefNo" class="font-mono font-bold text-amber-900 text-base"></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold">Status</p>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-300">CONFIRMED</span>
+                    </div>
+                </div>
+
+                <div class="bg-amber-100/50 p-4 rounded-xl border border-amber-200 space-y-2 text-xs">
+                    <p class="flex justify-between"><span class="text-gray-600">Temple Name:</span> <strong id="tTempleName" class="text-amber-950 font-bold"></strong></p>
+                    <p class="flex justify-between"><span class="text-gray-600">Darshan Type:</span> <strong id="tType" class="text-amber-700 font-bold"></strong></p>
+                    <p class="flex justify-between"><span class="text-gray-600">Date & Slot:</span> <strong id="tSlot"></strong></p>
+                    <p class="flex justify-between"><span class="text-gray-600">Primary Devotee:</span> <strong id="tDevotee"></strong></p>
+                    <p class="flex justify-between"><span class="text-gray-600">Devotee ID:</span> <strong id="tAadhaar"></strong></p>
+                    <p class="flex justify-between"><span class="text-gray-600">Devotees Breakdown:</span> <strong id="tBreakdown"></strong></p>
+                    <p class="flex justify-between text-sm border-t border-amber-200 pt-2"><span class="font-bold text-gray-800">Total Paid:</span> <strong id="tTotal" class="text-amber-900 font-bold text-base"></strong></p>
+                </div>
+
+                <div class="flex flex-col items-center justify-center p-3 bg-white rounded-xl border border-amber-200 text-center">
+                    <div class="w-32 h-32 p-2 border border-gray-300 rounded-lg flex items-center justify-center mb-1">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=DIVYADARSHAN-PASSPORT-VERIFIED" alt="QR Code" class="w-full h-full">
+                    </div>
+                    <p class="text-[10px] text-gray-500 uppercase font-semibold">Scan at Entry Scanner</p>
+                </div>
+            </div>
+
+            <div class="p-4 bg-amber-100 border-t border-amber-200 flex gap-3">
+                <button onclick="window.print()" class="flex-1 bg-[#150004] hover:bg-black text-amber-300 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-print"></i> Print E-Ticket
+                </button>
+                <button onclick="closeModal('ticketModal')" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 rounded-xl text-xs">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. REVENUE ADMIN DASHBOARD MODAL -->
+    <div id="adminDashboardModal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel rounded-2xl max-w-5xl w-full my-8 overflow-hidden border border-amber-500/40">
+            <div class="bg-gradient-to-r from-[#150004] via-black to-[#150004] p-6 text-amber-300 flex justify-between items-center border-b border-amber-500/30">
+                <div>
+                    <h3 class="font-serif text-xl font-bold">Temple Revenue Department</h3>
+                    <p class="text-xs text-amber-200/60">Master Booking & Financial Excel Audit Portal</p>
+                </div>
+                <button onclick="closeModal('adminDashboardModal')" class="text-amber-400 hover:text-white text-2xl">&times;</button>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <!-- Summary Stats -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-[#150004]/80 border border-amber-500/30 p-4 rounded-xl flex justify-between items-center">
+                        <div>
+                            <p class="text-xs text-amber-200/70 uppercase font-semibold">Total Revenue</p>
+                            <h4 id="statTotalRevenue" class="text-2xl font-black text-amber-400 mt-1">₹0</h4>
+                        </div>
+                        <i class="fa-solid fa-indian-rupee-sign text-3xl text-amber-500"></i>
+                    </div>
+                    <div class="bg-[#150004]/80 border border-amber-500/30 p-4 rounded-xl flex justify-between items-center">
+                        <div>
+                            <p class="text-xs text-amber-200/70 uppercase font-semibold">Tickets Issued</p>
+                            <h4 id="statTotalTickets" class="text-2xl font-black text-amber-400 mt-1">0</h4>
+                        </div>
+                        <i class="fa-solid fa-ticket text-3xl text-amber-500"></i>
+                    </div>
+                    <div class="bg-[#150004]/80 border border-amber-500/30 p-4 rounded-xl flex justify-between items-center">
+                        <div>
+                            <p class="text-xs text-amber-200/70 uppercase font-semibold">Active Shrines</p>
+                            <h4 class="text-2xl font-black text-amber-400 mt-1">20</h4>
+                        </div>
+                        <i class="fa-solid fa-gopuram text-3xl text-amber-500"></i>
+                    </div>
+                </div>
+
+                <!-- Export Bar -->
+                <div class="flex justify-between items-center">
+                    <h4 class="font-bold text-amber-300 text-base">Booking Audit Records</h4>
+                    <button onclick="downloadExcelReport()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 border border-emerald-500/40">
+                        <i class="fa-solid fa-file-excel text-base"></i> Download Excel Report (.csv)
+                    </button>
+                </div>
+
+                <!-- Data Table -->
+                <div class="overflow-x-auto rounded-xl border border-amber-500/30 max-h-80 overflow-y-auto">
+                    <table class="w-full text-left text-xs text-amber-100">
+                        <thead class="bg-[#150004] text-amber-300 uppercase font-semibold sticky top-0 border-b border-amber-500/30">
+                            <tr>
+                                <th class="p-3">Ref ID</th>
+                                <th class="p-3">Temple Name</th>
+                                <th class="p-3">Devotee & ID</th>
+                                <th class="p-3">Darshan Type</th>
+                                <th class="p-3">Date & Slot</th>
+                                <th class="p-3">Breakdown</th>
+                                <th class="p-3 text-right">Amount Paid</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminBookingsTableBody" class="divide-y divide-amber-500/10 bg-[#150004]/40">
+                            <!-- JS populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // MASTER TEMPLES DATA (WITH CUSTOM GOOGLE IMAGE LINKS)
+        const templesData = [
+            // --- 10 ANDHRA PRADESH TEMPLES ---
+            {
+                id: "ap-tirupati",
+                name: "Tirupati Srivari Venkateswara Temple",
+                location: "Tirumala, Tirupati, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "Dharma Darshan", price: 0 },
+                    { name: "Special Entry Darshan", price: 300 },
+                    { name: "VIP Break / Sheegra", price: 500 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZYtMLH0QYKT8XLaTMowIfdDXXXaMBi-XvNbTr61__Yg&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Tirumala+Venkateswara+Temple+Tirupati"
+            },
+            {
+                id: "ap-srisailam",
+                name: "Srisailam Mallikarjuna Swamy Temple",
+                location: "Srisailam, Nandyal, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "Free Dharma Line", price: 0 },
+                    { name: "Quick Darshan", price: 200 },
+                    { name: "Sparsha / VIP Entry", price: 500 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs7eyAPAjfXbchbRu3xKKPB3jFYCsLgqZ7KqjF2502dg&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Srisailam+Mallikarjuna+Swamy+Temple"
+            },
+            {
+                id: "ap-kanakadurga",
+                name: "Vijayawada Kanaka Durga Temple",
+                location: "Indrakeeladri, Vijayawada, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "General Dharma Queue", price: 0 },
+                    { name: "Mukha Mandapam Line", price: 100 },
+                    { name: "VIP Antaralayam Entry", price: 300 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWDwy3n9dS-bhvClccfXum44pdHuJXIkT7-oN4CaeajQ&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Kanaka+Durga+Temple+Vijayawada"
+            },
+            {
+                id: "ap-annavaram",
+                name: "Annavaram Satyanarayana Swamy",
+                location: "Annavaram, Kakinada, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "Sarva Darshan", price: 0 },
+                    { name: "Special Queue", price: 150 },
+                    { name: "Visishta Vrata Entry", price: 300 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfew9uHO-UhCiXZfaBzyjMTLAo-HOLnDSZ5Q87Omk1zQ&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Annavaram+Satyanarayana+Swamy+Temple"
+            },
+            {
+                id: "ap-simhachalam",
+                name: "Simhachalam Varaha Lakshmi Narasimha",
+                location: "Visakhapatnam, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "Free Queue", price: 0 },
+                    { name: "Special Line", price: 100 },
+                    { name: "Nijaroopa VIP Darshan", price: 300 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIIB849dNLUezkUXyXw5ik-l6jpAkUplx7smEWS2xl6Q&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Simhachalam+Temple+Visakhapatnam"
+            },
+            {
+                id: "ap-srikalahasti",
+                name: "Srikalahasti Kalahasteeswara Temple",
+                location: "Srikalahasti, Tirupati Dist, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "General Queue", price: 0 },
+                    { name: "Special Entry", price: 200 },
+                    { name: "Rahu-Ketu Special Line", price: 500 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBDhNC42y5cuCIWvax_ww14W_T8MnW4UFb0ko_vgKWBw&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Srikalahasti+Temple"
+            },
+            {
+                id: "ap-vadapalli",
+                name: "Vadapalli Venkateswara Swamy Temple",
+                location: "Vadapalli, East Godavari, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "Free Queue", price: 0 },
+                    { name: "Special Line", price: 100 },
+                    { name: "Ekanta VIP Line", price: 250 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIMfIE90QVF3orBVncmxAqu9iM2uX8nsAGEv18QdM0NA&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Vadapalli+Venkateswara+Swamy+Temple"
+            },
+            {
+                id: "ap-dwarakatirumala",
+                name: "Dwaraka Tirumala Temple",
+                location: "Dwaraka Tirumala, Eluru, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "Sarva Darshan", price: 0 },
+                    { name: "Special Line", price: 100 },
+                    { name: "Sheegra VIP Line", price: 200 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRn_n3Q1xQbfU1y0mXB6tGRVojLxqG7yz7txvGHmcNQSg&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Dwaraka+Tirumala+Temple"
+            },
+            {
+                id: "ap-kanipakam",
+                name: "Kanipakam Varasiddhi Vinayaka Temple",
+                location: "Kanipakam, Chittoor, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "Free Queue", price: 0 },
+                    { name: "Special Line", price: 150 },
+                    { name: "Nitya Seva Line", price: 300 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTCMuUgu55njhJsG-f9XOWMESB5a0iblpVm_pJf9Md4w&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Kanipakam+Vinayaka+Temple"
+            },
+            {
+                id: "ap-ahobilam",
+                name: "Ahobilam Nava Narasimha Swamy",
+                location: "Ahobilam, Nandyal, Andhra Pradesh",
+                state: "AP",
+                types: [
+                    { name: "Dharma Queue", price: 0 },
+                    { name: "Special Entry", price: 100 },
+                    { name: "VIP Mandapam Entry", price: 250 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX5P7ULcrjOf2qOiivc0-O7NplWJ7A65Y-tVpP9gFC4g&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Ahobilam+Temple"
+            },
+
+            // --- 10 TELANGANA TEMPLES ---
+            {
+                id: "ts-yadadri",
+                name: "Yadadri Sri Lakshmi Narasimha Swamy",
+                location: "Yadadri Bhuvanagiri, Telangana",
+                state: "TS",
+                types: [
+                    { name: "Free Queue", price: 0 },
+                    { name: "Special Line", price: 150 },
+                    { name: "VIP Fast Track", price: 300 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4CxijxpQD7X3JED5hwIT00XR5t8gNphAGyyaWPpglDSBPKik8zqej7ew&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Yadadri+Lakshmi+Narasimha+Temple"
+            },
+            {
+                id: "ts-bhadrachalam",
+                name: "Bhadrachalam Sita Ramachandra Swamy",
+                location: "Bhadrachalam, Kothagudem, Telangana",
+                state: "TS",
+                types: [
+                    { name: "Dharma Darshan", price: 0 },
+                    { name: "Special Line", price: 100 },
+                    { name: "VIP Antaralayam", price: 250 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKyKcpabQUYIuKjbIueEPMAzVYBBwE6bPnlvOn2A7Mag&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Bhadrachalam+Sita+Ramachandra+Swamy+Temple"
+            },
+            {
+                id: "ts-vemulawada",
+                name: "Vemulawada Sri Raja Rajeshwara Swamy",
+                location: "Vemulawada, Rajanna Sircilla, Telangana",
+                state: "TS",
+                types: [
+                    { name: "Free Queue", price: 0 },
+                    { name: "Special Line", price: 100 },
+                    { name: "Kode Seva Entry", price: 300 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCW38GNPPCWvXJ4YTg6X7VaAwxifOfXGThfy5sPMAYXw&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Vemulawada+Raja+Rajeshwara+Temple"
+            },
+            {
+                id: "ts-basara",
+                name: "Basara Gnana Saraswati Temple",
+                location: "Basar, Nirmal District, Telangana",
+                state: "TS",
+                types: [
+                    { name: "Sarva Darshan", price: 0 },
+                    { name: "Special Queue", price: 100 },
+                    { name: "Aksharabhyasam VIP Line", price: 250 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSxr6IltKFbCKCj_qbRPt757JSMQ0BjmVyw4_h29-V2A&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Basara+Gnana+Saraswati+Temple"
+            },
+            {
+                id: "ts-kondagattu",
+                name: "Kondagattu Anjaneya Swamy Temple",
+                location: "Muthyampet, Jagtial, Telangana",
+                state: "TS",
+                types: [
+                    { name: "Dharma Queue", price: 0 },
+                    { name: "Special Ticket", price: 100 },
+                    { name: "VIP Line", price: 200 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-SiKHKmJVjOZ3fQmL4ozVGedPzYhpUk-monoJyf3GpQ&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Kondagattu+Anjaneya+Swamy+Temple"
+            },
+            {
+                id: "ts-thousandpillars",
+                name: "Warangal Thousand Pillar Temple",
+                location: "Hanamkonda, Warangal, Telangana",
+                state: "TS",
+                types: [
+                    { name: "Free Queue", price: 0 },
+                    { name: "Special Line", price: 100 },
+                    { name: "VIP Heritage Line", price: 200 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5XKSKvKeGSPhuanDqKJEcITG_5ZA0L18ShwwMJzQcCw&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Thousand+Pillar+Temple+Warangal"
+            },
+            {
+                id: "ts-ramappa",
+                name: "Ramappa Rudreshwara Temple (UNESCO)",
+                location: "Palampet, Mulugu, Telangana",
+                state: "TS",
+                types: [
+                    { name: "Free Entry Queue", price: 0 },
+                    { name: "Special Line", price: 100 },
+                    { name: "VIP Tour Line", price: 200 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR16NdSjhorORkyJdimlw3iGoSEj5-mjgJqivjmegLtkg&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Ramappa+Temple+Mulugu"
+            },
+            {
+                id: "ts-birlamandir",
+                name: "Hyderabad Birla Mandir",
+                location: "Naubath Pahad, Hyderabad, Telangana",
+                state: "TS",
+                types: [
+                    { name: "Sarva Line", price: 0 },
+                    { name: "Special Queue", price: 100 },
+                    { name: "VIP Line", price: 200 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIYfDBEjYizWPxaJhgMdE02HYiI0G0XHYauAhe-UbBhl648b-a-dxaFesc&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Birla+Mandir+Hyderabad"
+            },
+            {
+                id: "ts-chilkur",
+                name: "Chilkur Balaji Temple",
+                location: "Chilkur, Ranga Reddy, Telangana",
+                state: "TS",
+                types: [
+                    { name: "General Pradakshina Queue", price: 0 },
+                    { name: "Special Queue", price: 100 },
+                    { name: "VIP Fast Queue", price: 200 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpQOjyxErPSm-duFsQQxowC01YkPXnTtym34j8z72fUA&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Chilkur+Balaji+Temple"
+            },
+            {
+                id: "ts-komuravelli",
+                name: "Komuravelli Mallikarjuna Swamy",
+                location: "Komuravelli, Siddipet, Telangana",
+                state: "TS",
+                types: [
+                    { name: "Dharma Queue", price: 0 },
+                    { name: "Special Queue", price: 100 },
+                    { name: "VIP Line", price: 200 }
+                ],
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRK_131N09e0bxbQzx_EFT6LJrRt0XHm1s2I8BE9f4g745Y3B2eRMa9KQE&s=10",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Komuravelli+Mallikarjuna+Swamy+Temple"
+            }
+        ];
+
+        // GLOBAL APP STATE
+        let isLoggedIn = false;
+        let isAdmin = false;
+        let loggedInUserName = "";
+        let activeTemple = null;
+        let selectedType = null;
+        let currentStateFilter = 'all';
+
+        let bookingsList = [
+            {
+                refNo: "DVD-90182-12",
+                templeName: "Tirupati Srivari Venkateswara Temple",
+                devoteeName: "Prabash",
+                aadhaar: "987654321012",
+                darshanType: "Special Entry Darshan (₹300)",
+                slot: "2026-11-05 (06:00 AM - 09:00 AM)",
+                breakdown: "2 Adults, 1 Child, 0 Senior",
+                totalAmount: 700
+            }
+        ];
+
+        // INIT APPLICATION
+        window.addEventListener('DOMContentLoaded', () => {
+            renderNavAuth();
+            renderTemples();
+
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingDate').min = today;
+            document.getElementById('bookingDate').value = today;
+        });
+
+        // NAVBAR AUTH RENDER (SHOWS DEVOTEE PROFILE, MY BOOKINGS & LOGOUT BUTTONS)
+        function renderNavAuth() {
+            const container = document.getElementById('navAuthContainer');
+            
+            if (isLoggedIn || isAdmin) {
+                // Find latest booking for this devotee
+                const userLatestBooking = bookingsList.find(b => b.devoteeName.toLowerCase() === loggedInUserName.toLowerCase()) || bookingsList[0];
+
+                container.innerHTML = `
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                        <!-- Devotee Profile Name Display -->
+                        <div class="flex items-center gap-1.5 bg-[#2a0008] border border-amber-500/40 px-3 py-1.5 rounded-xl text-xs text-amber-200">
+                            <i class="fa-solid fa-user-circle text-amber-400 text-sm"></i>
+                            <span class="font-bold text-amber-300">${loggedInUserName || 'Devotee'}</span>
+                        </div>
+
+                        <!-- Top Bar Active Booking Quick Ticker -->
+                        ${userLatestBooking ? `
+                            <div onclick="openModal('ticketModal')" title="View Latest Ticket" class="hidden md:flex items-center gap-2 bg-gradient-to-r from-amber-600/30 via-amber-500/20 to-amber-600/30 border border-amber-400/50 px-3 py-1.5 rounded-xl text-xs cursor-pointer hover:border-amber-300 transition-all">
+                                <span class="animate-pulse text-emerald-400 text-xs">●</span>
+                                <span class="text-amber-200/80">Booked:</span>
+                                <strong class="text-amber-300 truncate max-w-[130px]">${userLatestBooking.templeName.split(' ')[0]}</strong>
+                                <span class="text-amber-400 font-mono text-[11px]">(${userLatestBooking.refNo})</span>
+                            </div>
+                        ` : ''}
+
+                        <!-- My Bookings Option -->
+                        <button onclick="openMyBookingsModal()" class="bg-[#2a0008] hover:bg-[#3d000b] text-amber-300 font-bold px-3 py-1.5 rounded-xl text-xs border border-amber-500/40 transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-ticket text-amber-400"></i> My Bookings
+                        </button>
+
+                        ${isAdmin ? `
+                            <button onclick="openAdminDashboard()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow flex items-center gap-1 border border-amber-400/40">
+                                <i class="fa-solid fa-chart-line"></i> Dashboard
+                            </button>
+                        ` : ''}
+
+                        <!-- Logout Devotee Button -->
+                        <button onclick="handleLogout()" class="bg-amber-800/60 hover:bg-red-950 text-amber-200 font-bold px-3 py-1.5 rounded-xl text-xs border border-amber-500/40 transition-all flex items-center gap-1">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button onclick="openModal('loginModal')" class="text-xs font-semibold text-amber-200 hover:text-white px-3 py-2 rounded-lg transition-all">
+                        Login
+                    </button>
+                    <button onclick="openModal('registerModal')" class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold px-4 py-2 rounded-xl text-xs border border-amber-400/40 transition-all shadow-lg uppercase tracking-wider">
+                        Create an Account
+                    </button>
+                    <button onclick="openModal('adminLoginModal')" class="w-8 h-8 rounded-full bg-[#150004] border border-amber-500/30 text-amber-200/30 hover:text-amber-400 flex items-center justify-center text-xs transition-all">
+                        <i class="fa-solid fa-key"></i>
+                    </button>
+                `;
+            }
+        }
+
+        // RENDER TEMPLE CARDS
+        function renderTemples() {
+            const grid = document.getElementById('templesGrid');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+
+            const filtered = templesData.filter(t => {
+                const stateMatches = currentStateFilter === 'all' || t.state === currentStateFilter;
+                const searchMatches = t.name.toLowerCase().includes(searchVal) || t.location.toLowerCase().includes(searchVal);
+                return stateMatches && searchMatches;
+            });
+
+            document.getElementById('templeCountBadge').innerText = `Showing ${filtered.length} Temples`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 glass-panel rounded-2xl">
+                        <p class="text-amber-300 font-bold">No temples found matching your search query.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(temple => `
+                <div class="glass-panel gold-border-glow rounded-2xl overflow-hidden flex flex-col group transition-all duration-300">
+                    
+                    <!-- Temple Image -->
+                    <div class="relative h-48 overflow-hidden bg-[#150004]">
+                        <img src="${temple.image}" alt="${temple.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#150004] via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 bg-[#150004]/90 text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-amber-500/30">
+                            ${temple.state === 'AP' ? 'Andhra Pradesh' : 'Telangana'}
+                        </span>
+                        <div class="absolute bottom-3 left-3 right-3 text-white">
+                            <h3 class="font-serif text-lg text-amber-200 leading-tight">${temple.name}</h3>
+                            <p class="text-xs text-amber-200/70 flex items-center gap-1 mt-1">
+                                <i class="fa-solid fa-location-dot text-amber-400"></i> ${temple.location}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3 Darshan Types Overview -->
+                    <div class="p-4 bg-[#150004]/50 flex-grow border-t border-b border-amber-500/20 space-y-1.5">
+                        <span class="text-[10px] text-amber-200/70 font-bold uppercase tracking-wider block mb-1">3 Available Darshan Tiers</span>
+                        ${temple.types.map(type => `
+                            <div class="flex justify-between items-center text-xs bg-[#150004]/80 p-1.5 px-2.5 rounded-lg border border-amber-500/20">
+                                <span class="font-medium text-amber-100">${type.name}</span>
+                                <span class="font-bold ${type.price === 0 ? 'text-emerald-400' : 'text-amber-400'}">
+                                    ${type.price === 0 ? 'FREE' : '₹' + type.price}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- BOTTOM BUTTONS: Google Maps Location & Book Darshan ONLY -->
+                    <div class="p-4 bg-[#150004] grid grid-cols-2 gap-2">
+                        <a href="${temple.mapUrl}" target="_blank" rel="noopener noreferrer" class="bg-[#2a0008] hover:bg-[#3d000b] text-amber-300 font-bold py-2.5 px-3 rounded-xl text-xs transition-all text-center flex items-center justify-center gap-1.5 border border-amber-500/30">
+                            <i class="fa-solid fa-map-location-dot text-amber-400"></i> Google Maps
+                        </a>
+                        <button onclick="initiateBooking('${temple.id}')" class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition-all shadow-lg text-center flex items-center justify-center gap-1 border border-amber-400/40">
+                            <i class="fa-solid fa-ticket"></i> Book Darshan
+                        </button>
+                    </div>
+
+                </div>
+            `).join('');
+        }
+
+        // FILTER & SEARCH HANDLERS
+        function filterTemples(state) {
+            currentStateFilter = state;
+            document.querySelectorAll('.state-tab').forEach(btn => {
+                if (btn.dataset.state === state) {
+                    btn.className = "state-tab active-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border border-amber-500/40 transition-all bg-amber-600 text-white shadow";
+                } else {
+                    btn.className = "state-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border border-amber-500/30 transition-all bg-[#150004] text-amber-200 hover:bg-amber-600/30";
+                }
+            });
+            renderTemples();
+        }
+
+        function handleSearch() {
+            renderTemples();
+        }
+
+        // BOOKING TRIGGER
+        function initiateBooking(templeId) {
+            if (!isLoggedIn && !isAdmin) {
+                openModal('loginModal');
+                return;
+            }
+
+            activeTemple = templesData.find(t => t.id === templeId);
+            if (!activeTemple) return;
+
+            document.getElementById('bookModalTempleName').innerText = activeTemple.name;
+            document.getElementById('bookModalTempleLoc').innerText = activeTemple.location;
+
+            // Auto-fill logged-in devotee name in booking form
+            if (loggedInUserName) {
+                document.getElementById('devoteeName').value = loggedInUserName;
+            }
+
+            // Populate Darshan Types
+            const typesContainer = document.getElementById('darshanTypesContainer');
+            typesContainer.innerHTML = activeTemple.types.map((type, idx) => `
+                <label class="cursor-pointer border border-amber-500/30 hover:border-amber-400 rounded-xl p-3 bg-[#150004]/80 flex flex-col justify-between transition-all has-[:checked]:border-amber-400 has-[:checked]:bg-[#2a0008]">
+                    <input type="radio" name="darshanType" value="${idx}" ${idx === 0 ? 'checked' : ''} onchange="selectType(${idx})" class="sr-only">
+                    <span class="text-xs font-bold text-amber-100">${type.name}</span>
+                    <span class="text-sm font-black text-amber-400 mt-1">${type.price === 0 ? 'FREE' : '₹' + type.price}</span>
+                </label>
+            `).join('');
+
+            selectType(0);
+            openModal('bookingModal');
+        }
+
+        function selectType(index) {
+            selectedType = activeTemple.types[index];
+            calculateTotal();
+        }
+
+        // TARIFF CALCULATOR
+        function calculateTotal() {
+            if (!selectedType) return;
+
+            const adults = parseInt(document.getElementById('countAdults').value) || 0;
+            const children = parseInt(document.getElementById('countChildren').value) || 0;
+
+            const adultFare = selectedType.price;
+            const childFare = selectedType.price === 0 ? 0 : 100;
+
+            document.getElementById('adultFareTag').innerText = `₹${adultFare}`;
+            document.getElementById('childFareTag').innerText = `₹${childFare}`;
+
+            const total = (adults * adultFare) + (children * childFare);
+            document.getElementById('grandTotalDisplay').innerText = `₹${total}`;
+        }
+
+        // CONFIRM BOOKING
+    async function confirmBooking(event) {
+    event.preventDefault();
+
+    const date = document.getElementById('bookingDate').value;
+    const slot = document.getElementById('bookingSlot').value;
+    const adults = parseInt(document.getElementById('countAdults').value) || 0;
+    const children = parseInt(document.getElementById('countChildren').value) || 0;
+    const seniors = parseInt(document.getElementById('countSeniors').value) || 0;
+    const devotee = document.getElementById('devoteeName').value;
+    const aadhaar = document.getElementById('devoteeAadhaar').value;
+
+    const adultFare = selectedType.price;
+    const grandTotal = (adults * adultFare) + (children * (selectedType.price === 0 ? 0 : 100));
+
+    const refId = "DVD-" + Math.floor(10000 + Math.random() * 90000) + "-" + Math.floor(10 + Math.random() * 90);
+    const breakdownStr = `${adults} Adult(s), ${children} Child(ren), ${seniors} Senior/Disabled`;
+
+    const bookingPayload = {
+        refNo: refId,
+        templeName: activeTemple.name,
+        devoteeName: devotee,
+        aadhaar: aadhaar,
+        darshanType: `${selectedType.name} (${selectedType.price === 0 ? 'FREE' : '₹' + selectedType.price})`,
+        slot: `${date} (${slot})`,
+        breakdown: breakdownStr,
+        totalAmount: grandTotal
+    };
+
+    // --- THIS SENDS THE DATA TO YOUR MYSQL DATABASE VIA FLASK ---
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bookingPayload)
+        });
+        const result = await response.json();
+        if (result.success) {
+            console.log("Successfully saved to MySQL!");
+        } else {
+            console.error("Database error:", result.error);
+        }
+    } catch (err) {
+        console.error("Network error:", err);
+    }
+    // -------------------------------------------------------------
+
+    bookingsList.unshift(bookingPayload);
+
+    // Populate Receipt Modal UI
+    document.getElementById('tRefNo').innerText = refId;
+    document.getElementById('tTempleName').innerText = activeTemple.name;
+    document.getElementById('tType').innerText = bookingPayload.darshanType;
+    document.getElementById('tSlot').innerText = bookingPayload.slot;
+    document.getElementById('tDevotee').innerText = devotee;
+    document.getElementById('tAadhaar').innerText = aadhaar;
+    document.getElementById('tBreakdown').innerText = breakdownStr;
+    document.getElementById('tTotal').innerText = `₹${grandTotal}`;
+
+    closeModal('bookingModal');
+    openModal('ticketModal');
+    renderNavAuth();
+}
+
+        // OPEN MY BOOKINGS MODAL
+        function openMyBookingsModal() {
+            const container = document.getElementById('myBookingsListContainer');
+            
+            // Filter tickets belonging to logged-in user
+            const userBookings = bookingsList.filter(b => b.devoteeName.toLowerCase() === loggedInUserName.toLowerCase());
+
+            if (userBookings.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-amber-200/60">
+                        <i class="fa-solid fa-ticket-simple text-3xl mb-2 block text-amber-500/40"></i>
+                        <p class="font-bold text-sm">No bookings found for ${loggedInUserName}.</p>
+                        <p class="text-xs">Select any temple below to book your Darshan pass.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = userBookings.map(b => `
+                    <div class="bg-[#150004]/90 border border-amber-500/30 p-4 rounded-xl flex justify-between items-center hover:border-amber-400/60 transition-all">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-mono font-bold text-amber-400 text-xs">${b.refNo}</span>
+                                <span class="bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full">CONFIRMED</span>
+                            </div>
+                            <h4 class="font-bold text-amber-100 text-sm">${b.templeName}</h4>
+                            <p class="text-xs text-amber-200/70">${b.darshanType} • ${b.slot}</p>
+                            <p class="text-[11px] text-amber-200/50 mt-0.5">${b.breakdown}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-black text-amber-400 text-base block">₹${b.totalAmount}</span>
+                            <button onclick="viewSpecificTicket('${b.refNo}')" class="text-xs bg-amber-600/30 hover:bg-amber-600 border border-amber-500/50 text-amber-200 px-3 py-1 rounded-lg mt-1 transition-all">
+                                View Pass
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            openModal('myBookingsModal');
+        }
+
+        function viewSpecificTicket(refNo) {
+            const b = bookingsList.find(item => item.refNo === refNo);
+            if (!b) return;
+
+            document.getElementById('tRefNo').innerText = b.refNo;
+            document.getElementById('tTempleName').innerText = b.templeName;
+            document.getElementById('tType').innerText = b.darshanType;
+            document.getElementById('tSlot').innerText = b.slot;
+            document.getElementById('tDevotee').innerText = b.devoteeName;
+            document.getElementById('tAadhaar').innerText = b.aadhaar;
+            document.getElementById('tBreakdown').innerText = b.breakdown;
+            document.getElementById('tTotal').innerText = `₹${b.totalAmount}`;
+
+            closeModal('myBookingsModal');
+            openModal('ticketModal');
+        }
+
+        // AUTH & FORM RESET HANDLERS
+        function handleLogin(event) {
+            event.preventDefault();
+            const inputVal = document.getElementById('loginEmail').value.trim();
+            loggedInUserName = inputVal || "Prabash";
+
+            isLoggedIn = true;
+            isAdmin = false;
+
+            closeModal('loginModal');
+            renderNavAuth();
+        }
+
+async function handleRegister(event) {
+    event.preventDefault();
+
+    // 1. Gather input values from the registration form
+    const userData = {
+        fullName: document.getElementById('regName').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        phone: document.getElementById('regPhone').value.trim(),
+        password: document.getElementById('regPassword').value
+    };
+
+    try {
+        // 2. Send data to Flask backend to save in the 'users' table
+        const response = await fetch('http://127.0.0.1:5000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert("Account registered successfully! You are now logged in.");
+
+            // 3. Automatically log them in right after registering
+            loggedInUserName = userData.fullName || "User";
+            isLoggedIn = true;
+            isAdmin = false;
+
+            // 4. Reset form and close ONLY the register modal
+            document.getElementById('registerForm').reset();
+            closeModal('registerModal');
+            renderNavAuth();
+            
+            // NOTE: We do NOT create or show any booking tickets here at all!
+        } else {
+            // Handles duplicate emails or server errors cleanly
+            alert("Registration failed: " + result.error);
+        }
+    } catch (err) {
+        console.error("Network or Backend Connection Error:", err);
+        alert("Could not connect to the server. Make sure Flask is running.");
+    }
+}
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const u = document.getElementById('adminUser').value;
+            const p = document.getElementById('adminPass').value;
+
+            if (u === 'admin' && p === 'admin123') {
+                isAdmin = true;
+                isLoggedIn = true;
+                loggedInUserName = "Revenue Admin";
+
+                document.getElementById('adminLoginForm').reset();
+                closeModal('adminLoginModal');
+                renderNavAuth();
+                openAdminDashboard();
+            } else {
+                alert("Access Denied");
+            }
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            isAdmin = false;
+            loggedInUserName = "";
+
+            if(document.getElementById('loginForm')) document.getElementById('loginForm').reset();
+            if(document.getElementById('registerForm')) document.getElementById('registerForm').reset();
+            if(document.getElementById('bookingForm')) document.getElementById('bookingForm').reset();
+
+            renderNavAuth();
+        }
+
+        // REVENUE ADMIN DASHBOARD & EXCEL EXPORT
+        function openAdminDashboard() {
+            const totalRev = bookingsList.reduce((sum, item) => sum + item.totalAmount, 0);
+            document.getElementById('statTotalRevenue').innerText = `₹${totalRev.toLocaleString('en-IN')}`;
+            document.getElementById('statTotalTickets').innerText = bookingsList.length;
+
+            const tbody = document.getElementById('adminBookingsTableBody');
+            tbody.innerHTML = bookingsList.map(b => `
+                <tr class="hover:bg-[#150004]">
+                    <td class="p-3 font-mono font-bold text-amber-400">${b.refNo}</td>
+                    <td class="p-3 font-medium text-amber-100">${b.templeName}</td>
+                    <td class="p-3">
+                        <span class="font-bold block text-amber-100">${b.devoteeName}</span>
+                        <span class="text-[10px] text-amber-200/60">ID: ${b.aadhaar}</span>
+                    </td>
+                    <td class="p-3 text-amber-200/80">${b.darshanType}</td>
+                    <td class="p-3 text-amber-200/80">${b.slot}</td>
+                    <td class="p-3 text-amber-200/80">${b.breakdown}</td>
+                    <td class="p-3 text-right font-bold text-amber-400">₹${b.totalAmount}</td>
+                </tr>
+            `).join('');
+
+            openModal('adminDashboardModal');
+        }
+
+        function downloadExcelReport() {
+            if (bookingsList.length === 0) return;
+
+            let csv = "data:text/csv;charset=utf-8,Booking Ref ID,Temple Name,Primary Devotee,Aadhaar ID,Darshan Type,Date & Slot,Devotees Breakdown,Total Amount (INR)\n";
+
+            bookingsList.forEach(b => {
+                csv += `"${b.refNo}","${b.templeName}","${b.devoteeName}","${b.aadhaar}","${b.darshanType}","${b.slot}","${b.breakdown}",${b.totalAmount}\n`;
+            });
+
+            const encodedUri = encodeURI(csv);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Temple_Revenue_Audit_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // MODAL HELPERS
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function switchModal(fromId, toId) {
+            closeModal(fromId);
+            openModal(toId);
+        }
+    </script>
+</body>
+</html>
